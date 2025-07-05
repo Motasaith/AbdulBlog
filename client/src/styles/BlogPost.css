@@ -1,0 +1,237 @@
+/* BlogPost.css */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.main-grid {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.blog-post-full {
+  flex: 3;
+  background: var(--card-bg, #fff);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+.blog-post-full img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.blog-post-full h2 {
+  margin: 1rem 0;
+  font-size: 2rem;
+}
+
+.comment {
+  background: var(--comment-bg, #f4f4f4);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+.comment strong {
+  color: #333;
+}
+
+.comment em {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.contact-form button {
+  background-color: #2962ff;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background-color: #0039cb;
+}
+
+.sidebar {
+  flex: 1;
+  margin-top: 0;
+  background: var(--card-bg, #fff);
+  padding: 1rem;
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.sidebar img.author-pic {
+  width: 100%;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+
+  .blog-post-full,
+  .sidebar {
+    flex: unset;
+    width: 100%;
+    margin: 0 0 2rem 0;
+  }
+
+  .sidebar {
+    margin-top: 0;
+  }
+}
+
+.nav-links.show {
+  display: block !important;
+}
+
+/* BlogPost specific tweaks */
+.blog-post-full img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.comment {
+  background: #f3f3f3;
+  margin-top: 1rem;
+  padding: 10px;
+  border-left: 4px solid #0a192f;
+}
+
+.dark .comment {
+  background: #1f2937;
+  color: #fff;
+}
+
+.dark-toggle,
+.menu-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  margin-left: 10px;
+  cursor: pointer;
+  z-index: 1001;
+  position: relative;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: var(--header-bg, #1f2937);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+}
+
+/* Dark mode styles */
+body.dark {
+  --card-bg: #2d2d2d;
+  --comment-bg: #1f2937;
+  --header-bg: #111827;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark .blog-post-full {
+  background: var(--card-bg);
+  color: var(--text, #e0e0e0);
+}
+
+body.dark .sidebar {
+  background: var(--card-bg);
+  color: var(--text, #e0e0e0);
+}
+
+body.dark .contact-form input,
+body.dark .contact-form textarea {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+body.dark .contact-form button {
+  background-color: #3b82f6;
+}
+
+body.dark .contact-form button:hover {
+  background-color: #1e40af;
+}
+
+/* Scroll to top button */
+#scrollToTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 1002;
+  background-color: #2962ff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+#scrollToTopBtn:hover {
+  background-color: #0039cb;
+}
+
+body.dark #scrollToTopBtn {
+  background-color: #3b82f6;
+}
+
+body.dark #scrollToTopBtn:hover {
+  background-color: #1e40af;
+}

@@ -1,0 +1,66 @@
+.dashboard-title {
+  font-size: 2rem;
+  margin: 30px 0 20px;
+  text-align: center;
+  color: #333;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Inter", sans-serif;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.admin-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.badge-you {
+  background-color: #3498db;
+  color: white;
+}
+
+.badge-other {
+  background-color: #95a5a6;
+  color: white;
+}

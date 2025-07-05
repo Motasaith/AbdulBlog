@@ -1,0 +1,16 @@
+node_modules
+# Node
+node_modules/
+.env
+.DS_Store
+
+# React build
+client/build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# VS Code
+.vscode/
