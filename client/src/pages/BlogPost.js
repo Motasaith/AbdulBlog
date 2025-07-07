@@ -18,7 +18,9 @@ const BlogPost = () => {
   // Fetch post data
   const fetchPost = async () => {
     try {
-      const res = await axios.get(`/api/posts/${id}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/posts/${id}`
+      );
       setPost(res.data);
     } catch (err) {
       console.error("Error fetching post:", err);

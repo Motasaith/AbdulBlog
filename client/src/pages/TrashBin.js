@@ -70,7 +70,7 @@ const TrashBin = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/posts/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTrashedPosts((prev) => prev.filter((post) => post._id !== id));

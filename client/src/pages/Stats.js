@@ -26,11 +26,14 @@ const Stats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/stats`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setStats(res.data);
         setMonthlyViews(res.data.monthlyViews || []);
       } catch (err) {

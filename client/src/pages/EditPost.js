@@ -44,7 +44,7 @@ const EditPost = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:5000/api/posts/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/posts/${id}`,
         { title, thumbnail, excerpt, content },
         {
           headers: {
