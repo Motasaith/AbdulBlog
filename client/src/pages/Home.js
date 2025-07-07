@@ -107,14 +107,18 @@ const Home = () => {
 
       <main className="container main-grid">
         <section className="blog-posts">
-          {posts.map((post) => (
-            <article className="post" key={post._id}>
-              <img src={post.thumbnail || "/default-image.jpg"} alt="Blog" />
-              <h3>{post.title}</h3>
-              <p>{post.excerpt || post.content.substring(0, 100) + "..."}</p>
-              <Link to={`/blogs/${post._id}`}>Read More</Link>
-            </article>
-          ))}
+          {Array.isArray(posts) ? (
+            posts.map((post) => (
+              <article className="post" key={post._id}>
+                <img src={post.thumbnail || "/default-image.jpg"} alt="Blog" />
+                <h3>{post.title}</h3>
+                <p>{post.excerpt || post.content.substring(0, 100) + "..."}</p>
+                <Link to={`/blogs/${post._id}`}>Read More</Link>
+              </article>
+            ))
+          ) : (
+            <p>No posts available.</p>
+          )}
         </section>
 
         <aside className="sidebar">

@@ -36,3 +36,6 @@ connectDB().then(() => {
     console.log(`🚀 Server running at http://localhost:${PORT}`)
   );
 });
+
+const cors = require("cors");
+app.use(cors());

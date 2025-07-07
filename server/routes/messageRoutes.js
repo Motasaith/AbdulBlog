@@ -54,7 +54,4 @@ router.delete("/:id", verifyToken, checkRole("admin"), async (req, res) => {
   }
 });
 
-// ✅ PUBLIC route to fetch blog post comments
-router.get("/public", getPublicMessages);
-
 module.exports = router;
