@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast'; // TODO: Implement toast notifications
 import "../styles/Login.css";
 
 const Login = () => {

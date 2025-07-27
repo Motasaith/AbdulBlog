@@ -12,7 +12,7 @@ const AddPost = () => {
   const [content, setContent] = useState("**Start writing your blog here...**");
 
   const navigate = useNavigate();
-  const token = localStorage.getItem('authToken');
+  // const token = localStorage.getItem("authToken"); // TODO: Use for authentication
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {

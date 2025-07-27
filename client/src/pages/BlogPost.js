@@ -87,7 +87,7 @@ const BlogPost = () => {
   useEffect(() => {
     fetchPost();
     fetchComments();
-  }, [id, fetchComments]);
+  }, [id, fetchComments]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle comment form submit
   const handleSubmit = async (e) => {
