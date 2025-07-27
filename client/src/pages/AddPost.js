@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
-import axios from "axios";
-import "../style.css";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import MDEditor from '@uiw/react-md-editor';
+import api from '../utils/api';
+import { toast } from 'react-hot-toast';
+import { ArrowLeftIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
 const AddPost = () => {
   const [title, setTitle] = useState("");
@@ -11,165 +12,203 @@ const AddPost = () => {
   const [content, setContent] = useState("**Start writing your blog here...**");
 
   const navigate = useNavigate();
-  const token = localStorage.getItem("authToken");
-
-  useEffect(() => {
-    const toggleBtn = document.getElementById("darkToggle");
-    const body = document.body;
-    const menuIcon = document.getElementById("menuIcon");
-    const navLinks = document.getElementById("navLinks");
-    const scrollBtn = document.getElementById("scrollToTopBtn");
-
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        body.classList.toggle("dark");
-      };
-    }
-
-    if (menuIcon && navLinks) {
-      menuIcon.onclick = () => {
-        navLinks.classList.toggle("show");
-      };
-    }
-
-    if (scrollBtn) {
-      window.onscroll = function () {
-        if (
-          document.body.scrollTop > 300 ||
-          document.documentElement.scrollTop > 300
-        ) {
-          scrollBtn.style.display = "block";
-        } else {
-          scrollBtn.style.display = "none";
-        }
-      };
-
-      scrollBtn.onclick = function () {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      };
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://kit.fontawesome.com/af04cde8cd.js";
-    script.crossOrigin = "anonymous";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+  const token = localStorage.getItem('authToken');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/posts`,
-        { title, thumbnail, excerpt, content },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Post created successfully!");
-      navigate("/admin/manage-posts");
+      await api.post('/api/posts', {
+        title, 
+        thumbnail, 
+        excerpt, 
+        content
+      });
+      toast.success('Post created successfully!');
+      navigate('/admin/manage-posts');
     } catch (err) {
-      console.error("Post creation failed:", err);
-      alert("Failed to create post.");
+      console.error('Post creation failed:', err);
+      toast.error('Failed to create post. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <header>
-        <div className="container nav-container">
-          <h1 className="logo">AbdulBlog</h1>
-          <nav>
-            <ul className="nav-links" id="navLinks">
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/blogs">Blogs</Link>
-              </li>
-              <li>
-                <Link to="/admin">Dashboard</Link>
-              </li>
-            </ul>
-            <button className="dark-toggle" id="darkToggle">
-              <i className="fas fa-moon"></i>
-            </button>
-            <div className="menu-icon" id="menuIcon">
-              <i className="fas fa-bars"></i>
+      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+                <span>Back</span>
+              </button>
+              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                AbdulBlog
+              </h1>
             </div>
-          </nav>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                Home
+              </Link>
+              <Link to="/blogs" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                Blogs
+              </Link>
+              <Link to="/admin" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                Dashboard
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="hero">
-        <div className="container">
-          <h2>Add New Blog Post</h2>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Create New Post
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Share your thoughts with the world
+          </p>
         </div>
-      </section>
 
-      {/* Main Grid */}
-      <main className="container main-grid">
-        <section className="blog-posts">
-          <div className="post">
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <label>Title</label>
-              <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Form */}
+          <div className="lg:col-span-3">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div className="space-y-6">
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Post Title
+                    </label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Enter your post title..."
+                      required
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
 
-              <label>Image URL</label>
-              <input
-                value={thumbnail}
-                onChange={(e) => setThumbnail(e.target.value)}
-                required
-              />
+                  {/* Thumbnail */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Featured Image URL
+                    </label>
+                    <div className="relative">
+                      <PhotoIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <input
+                        type="url"
+                        value={thumbnail}
+                        onChange={(e) => setThumbnail(e.target.value)}
+                        placeholder="https://example.com/image.jpg"
+                        required
+                        className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      />
+                    </div>
+                  </div>
 
-              <label>Excerpt</label>
-              <input
-                value={excerpt}
-                onChange={(e) => setExcerpt(e.target.value)}
-                required
-              />
+                  {/* Excerpt */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Post Excerpt
+                    </label>
+                    <textarea
+                      value={excerpt}
+                      onChange={(e) => setExcerpt(e.target.value)}
+                      placeholder="Brief description of your post..."
+                      rows={3}
+                      required
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                    />
+                  </div>
 
-              <label>Post Body</label>
-              <div data-color-mode="light" className="quill-editor">
-                <MDEditor value={content} onChange={setContent} />
+                  {/* Content Editor */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Post Content
+                    </label>
+                    <div className="rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+                      <MDEditor
+                        value={content}
+                        onChange={setContent}
+                        preview="edit"
+                        height={400}
+                        data-color-mode="light"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <button type="submit">Publish</button>
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Publishing...</span>
+                    </>
+                  ) : (
+                    <span>Publish Post</span>
+                  )}
+                </button>
+              </div>
             </form>
           </div>
-        </section>
 
-        {/* Sidebar */}
-        <aside className="sidebar">
-          {/* <img
-            src="/Profile picture (5).png"
-            className="author-pic"
-            alt="Admin"
-          /> */}
-          <h3>Quick Tip</h3>
-          <p>Use ** for bold, * for italic, and ` for code in markdown!</p>
-        </aside>
-      </main>
-
-      {/* Footer */}
-      <footer>
-        <div className="container">
-          <p>© 2025 AbdulBlog. All rights reserved.</p>
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Markdown Tips
+              </h3>
+              <div className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+                <div>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">**bold**</code>
+                  <span className="ml-2">for bold text</span>
+                </div>
+                <div>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">*italic*</code>
+                  <span className="ml-2">for italic text</span>
+                </div>
+                <div>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">`code`</code>
+                  <span className="ml-2">for inline code</span>
+                </div>
+                <div>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"># Heading</code>
+                  <span className="ml-2">for headers</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </footer>
-
-      <button id="scrollToTopBtn" title="Go to top">
-        <i className="fas fa-chevron-up"></i>
-      </button>
-    </>
+      </main>
+    </div>
   );
 };
 

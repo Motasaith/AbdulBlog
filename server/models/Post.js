@@ -11,6 +11,12 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    excerpt: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [200, 'Excerpt cannot be more than 200 characters']
+    },
     tags: {
       type: [String],
       default: [],
@@ -22,6 +28,7 @@ const PostSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
+      required: true,
     },
     deleted: {
       type: Boolean,

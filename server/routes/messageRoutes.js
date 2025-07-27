@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
-const { verifyToken, checkRole } = require("../middleware/auth");
+const verifyToken = require("../middleware/verifyToken");
+const checkRole = require("../middleware/checkRole");
 
 // POST /api/messages — for contact form (public, no auth)
 router.post("/", async (req, res) => {

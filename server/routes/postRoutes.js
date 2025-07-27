@@ -5,13 +5,14 @@ const verifyToken = require("../middleware/verifyToken");
 
 // ✅ CREATE a new post
 router.post("/", verifyToken, async (req, res) => {
-  const { title, content, tags, thumbnail } = req.body;
+  const { title, content, excerpt, tags, thumbnail } = req.body;
 
   try {
     const newPost = new Post({
       title,
       content,
-      tags,
+      excerpt,
+      tags: tags || [],
       thumbnail,
       createdBy: req.user.id,
     });
@@ -35,7 +36,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET single post by ID
+// ✅ GET trashed posts (MUST come before /:id route)
+router.get("/trash/all", verifyToken, async (req, res) => {
+  try {
+    const trashedPosts = await Post.find({ deleted: true }).sort({
+      deletedAt: -1,
+    });
+    res.json(trashedPosts);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch trash" });
+  }
+});
+
+// GET single post by ID (MUST come after specific routes)
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -77,17 +90,6 @@ router.put("/:id/delete", verifyToken, async (req, res) => {
   }
 });
 
-// ✅ GET trashed posts
-router.get("/trash/all", verifyToken, async (req, res) => {
-  try {
-    const trashedPosts = await Post.find({ deleted: true }).sort({
-      deletedAt: -1,
-    });
-    res.json(trashedPosts);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch trash" });
-  }
-});
 
 // ✅ RESTORE post
 router.put("/:id/restore", verifyToken, async (req, res) => {

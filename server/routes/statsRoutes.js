@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken } = require("../middleware/auth");
+const verifyToken = require("../middleware/verifyToken");
 const Post = require("../models/Post");
 const Message = require("../models/Message"); // if you store contact messages
 

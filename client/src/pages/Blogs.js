@@ -1,7 +1,7 @@
 // src/pages/Blogs.js
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import "../style.css";
 
 const Blogs = () => {
@@ -10,9 +10,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/posts`
-        );
+        const res = await api.get('/api/posts');
         setPosts(res.data);
       } catch (err) {
         console.error("Failed to fetch posts:", err);
@@ -100,18 +98,14 @@ const Blogs = () => {
 
       <main className="container main-grid">
         <section className="blog-posts">
-          {Array.isArray(posts) ? (
-            posts.map((post) => (
-              <article className="post" key={post._id}>
-                <img src={post.thumbnail || "/default-image.jpg"} alt="Blog" />
-                <h3>{post.title}</h3>
-                <p>{post.excerpt || post.content.substring(0, 100) + "..."}</p>
-                <Link to={`/blogs/${post._id}`}>Read More</Link>
-              </article>
-            ))
-          ) : (
-            <p>No posts available.</p>
-          )}
+          {posts.map((post) => (
+            <article className="post" key={post._id}>
+              <img src={post.thumbnail || "/default-image.jpg"} alt="Blog" />
+              <h3>{post.title}</h3>
+              <p>{post.excerpt || post.content.substring(0, 100) + "..."}</p>
+              <Link to={`/blogs/${post._id}`}>Read More</Link>
+            </article>
+          ))}
         </section>
 
         <aside className="sidebar">

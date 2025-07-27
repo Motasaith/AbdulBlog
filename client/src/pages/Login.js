@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
+import { toast } from 'react-hot-toast';
 import "../styles/Login.css";
 
 const Login = () => {
@@ -24,13 +25,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/login`,
-        {
-          username,
-          password,
-        }
-      );
+      const res = await api.post('/api/auth/login', {
+        username,
+        password,
+      });
 
       const { token, user } = res.data;
 

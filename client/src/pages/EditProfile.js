@@ -108,7 +108,7 @@ const EditProfile = () => {
 
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/admins/${adminId}/profile`,
+        `http://localhost:5000/api/admins/${adminId}/profile`,
         updatedProfile,
         {
           headers: {

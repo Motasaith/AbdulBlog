@@ -52,14 +52,11 @@ const ManagePosts = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/posts`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get("http://localhost:5000/api/posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setPosts(res.data);
     } catch (err) {
       console.error("Failed to fetch posts:", err);
