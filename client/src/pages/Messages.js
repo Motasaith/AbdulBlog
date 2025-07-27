@@ -1,63 +1,70 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
-import "../styles/Messages.css";
+import { 
+  ChatBubbleLeftRightIcon,
+  TrashIcon,
+  ArrowLeftIcon,
+  CalendarIcon,
+  UserIcon,
+  EnvelopeIcon,
+  MagnifyingGlassIcon
+} from '@heroicons/react/24/outline';
+import { toast } from 'react-hot-toast';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
-  const token = localStorage.getItem("authToken");
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchMessages();
-
-    const toggleBtn = document.getElementById("darkToggle");
-    const body = document.body;
-    const menuIcon = document.getElementById("menuIcon");
-    const navLinks = document.getElementById("navLinks");
-    const scrollBtn = document.getElementById("scrollToTopBtn");
-
-    if (toggleBtn) toggleBtn.onclick = () => body.classList.toggle("dark");
-    if (menuIcon && navLinks)
-      menuIcon.onclick = () => navLinks.classList.toggle("show");
-
-    if (scrollBtn) {
-      window.onscroll = function () {
-        scrollBtn.style.display =
-          document.documentElement.scrollTop > 300 ? "block" : "none";
-      };
-      scrollBtn.onclick = function () {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      };
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://kit.fontawesome.com/af04cde8cd.js";
-    script.crossOrigin = "anonymous";
-    script.async = true;
-    document.body.appendChild(script);
   }, []);
 
   const fetchMessages = async () => {
     try {
+      setIsLoading(true);
       const res = await api.get("/api/messages");
       setMessages(res.data);
     } catch (err) {
       console.error("Failed to fetch messages:", err);
+      toast.error("Failed to load messages");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm("Delete this message?");
-    if (!confirmed) return;
+  const handleDelete = async (id, subject) => {
+    if (!window.confirm(`Delete message: "${subject}"?`)) return;
 
     try {
       await api.delete(`/api/messages/${id}`);
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
+      toast.success("Message deleted successfully");
     } catch (err) {
       console.error("Delete error:", err);
-      alert("Failed to delete message.");
+      toast.error("Failed to delete message.");
     }
   };
+
+  const filteredMessages = messages.filter(msg => 
+    msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    msg.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    msg.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    msg.message?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading messages...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="messages-page">
@@ -109,7 +116,7 @@ const Messages = () => {
               <p className="msg-body">{msg.message}</p>
               <button
                 className="delete-btn"
-                onClick={() => handleDelete(msg._id)}
+                onClick={() => handleDelete(msg._id, msg.subject)}
               >
                 Delete
               </button>

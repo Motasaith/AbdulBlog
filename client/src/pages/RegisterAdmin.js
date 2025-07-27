@@ -1,103 +1,200 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../styles/Login.css"; // reuse login styles
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/api";
+import { 
+  UserPlusIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  ArrowLeftIcon,
+  ShieldCheckIcon
+} from '@heroicons/react/24/outline';
+import { toast } from 'react-hot-toast';
 
 const RegisterAdmin = () => {
-  const [dark, setDark] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://kit.fontawesome.com/af04cde8cd.js";
-    script.crossOrigin = "anonymous";
-    script.async = true;
-    document.body.appendChild(script);
-
-    if (dark) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  }, [dark]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    
+    if (!username.trim()) {
+      toast.error("Username is required");
+      return;
+    }
+    
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+    
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
+    setIsLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await api.post("/api/auth/register", {
         username,
         password,
       });
 
-      setMessage("Admin registered successfully!");
+      toast.success("Admin registered successfully!");
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (err) {
       console.error(err);
-      setMessage("Registration failed. Username might already exist.");
+      toast.error(err.response?.data?.message || "Registration failed. Username might already exist.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="login-wrapper">
-      <button
-        className="dark-toggle login-toggle"
-        onClick={() => setDark((prev) => !prev)}
-        title="Toggle dark mode"
-      >
-        <i className={`fas fa-${dark ? "sun" : "moon"}`}></i>
-      </button>
-
-      <form className="login-form" onSubmit={handleRegister}>
-        <h2>Register New Admin</h2>
-
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-
-        <div className="password-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="password-input"
-          />
-          <i
-            className={`fas fa-${
-              showPassword ? "eye-slash" : "eye"
-            } password-icon`}
-            onClick={() => setShowPassword((prev) => !prev)}
-          ></i>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Header */}
+      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+                <span>Back</span>
+              </button>
+              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                AbdulBlog
+              </h1>
+            </div>
+          </div>
         </div>
+      </header>
 
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+      {/* Main Content */}
+      <main className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+          <div className="flex items-center justify-center mb-6">
+            <div className="p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-full">
+              <UserPlusIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+            </div>
+          </div>
+          
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Register New Admin
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              Create a new administrator account
+            </p>
+          </div>
 
-        <button type="submit">Register</button>
-        <p className="login-message">{message}</p>
-      </form>
+          <form onSubmit={handleRegister} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter username"
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password (min 6 characters)"
+                  required
+                  className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
+                  required
+                  className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  {showConfirmPassword ? (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Creating Admin...</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheckIcon className="h-5 w-5" />
+                  <span>Register Admin</span>
+                </>
+              )}
+            </button>
+
+            <div className="text-center">
+              <Link
+                to="/login"
+                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+              >
+                Already have an account? Sign in
+              </Link>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
   );
 };
