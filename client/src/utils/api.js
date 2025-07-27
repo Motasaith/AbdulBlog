@@ -2,8 +2,14 @@ import axios from 'axios';
 
 // Get the API base URL from environment variables
 export const getApiUrl = () => {
-  const url = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  // Use production backend if no environment variable is set and we're in production
+  const defaultUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://abdulblog-bji0.onrender.com' 
+    : 'http://localhost:5000';
+  
+  const url = process.env.REACT_APP_API_URL || defaultUrl;
   console.log('API Base URL:', url);
+  console.log('Environment:', process.env.NODE_ENV);
   return url;
 };
 
