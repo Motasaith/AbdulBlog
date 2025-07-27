@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/ManagePosts.css";
 
 const ManagePosts = () => {
@@ -52,11 +52,7 @@ const ManagePosts = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/posts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get("/api/posts");
       setPosts(res.data);
     } catch (err) {
       console.error("Failed to fetch posts:", err);
@@ -68,15 +64,7 @@ const ManagePosts = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/posts/${id}/delete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.put(`/api/posts/${id}/delete`);
       setPosts((prev) => prev.filter((post) => post._id !== id));
     } catch (err) {
       alert("Failed to delete post");

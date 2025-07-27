@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/ManageAdmins.css";
 
 const ManageAdmins = () => {
@@ -15,9 +15,7 @@ const ManageAdmins = () => {
   // 🔄 Fetch all admins
   const fetchAdmins = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admins", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/admin");
       setAdmins(res.data);
       setLoading(false);
     } catch (err) {
@@ -35,9 +33,7 @@ const ManageAdmins = () => {
     if (!window.confirm("Are you sure you want to delete this admin?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/admins/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/api/admin/${id}`);
       setAdmins((prev) => prev.filter((admin) => admin._id !== id));
     } catch (err) {
       alert("Failed to delete admin");
@@ -50,16 +46,7 @@ const ManageAdmins = () => {
       return;
 
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/admins/${adminId}/role`,
-        { role: newRole },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-
+      const res = await api.put(`/api/admin/${adminId}/role`, { role: newRole });
       alert(res.data.message);
       setAdmins((prev) =>
         prev.map((admin) =>

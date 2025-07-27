@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/Stats.css";
 import {
   BarChart,
@@ -21,16 +21,12 @@ const Stats = () => {
 
   const [monthlyViews, setMonthlyViews] = useState([]);
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await api.get("/api/stats");
         setStats(res.data);
         setMonthlyViews(res.data.monthlyViews || []);
       } catch (err) {

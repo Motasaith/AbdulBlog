@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/EditPost.css";
 
 const EditPost = () => {
@@ -19,11 +19,7 @@ const EditPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await api.get(`/api/posts/${id}`);
         const post = res.data;
         setTitle(post.title);
         setThumbnail(post.thumbnail);
@@ -43,15 +39,7 @@ const EditPost = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `http://localhost:5000/api/posts/${id}`,
-        { title, thumbnail, excerpt, content },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.put(`/api/posts/${id}`, { title, thumbnail, excerpt, content });
       alert("Post updated successfully.");
       navigate("/admin/manage-posts");
     } catch (err) {

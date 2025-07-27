@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/Messages.css";
 
 const Messages = () => {
@@ -39,11 +39,7 @@ const Messages = () => {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/messages", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get("/api/messages");
       setMessages(res.data);
     } catch (err) {
       console.error("Failed to fetch messages:", err);
@@ -55,11 +51,7 @@ const Messages = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/messages/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await api.delete(`/api/messages/${id}`);
       setMessages((prev) => prev.filter((msg) => msg._id !== id));
     } catch (err) {
       console.error("Delete error:", err);

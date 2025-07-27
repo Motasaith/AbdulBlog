@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import "../styles/TrashBin.css";
 
 const TrashBin = () => {
@@ -39,9 +39,7 @@ const TrashBin = () => {
 
   const fetchTrashedPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/posts/trash/all", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/posts/trash/all");
       setTrashedPosts(res.data);
     } catch (err) {
       console.error("Failed to fetch trashed posts:", err);
@@ -50,13 +48,7 @@ const TrashBin = () => {
 
   const handleRestore = async (id) => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/posts/${id}/restore`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.put(`/api/posts/${id}/restore`);
       setTrashedPosts((prev) => prev.filter((post) => post._id !== id));
       alert("Post restored successfully!");
     } catch (err) {
@@ -70,9 +62,7 @@ const TrashBin = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/api/posts/${id}`);
       setTrashedPosts((prev) => prev.filter((post) => post._id !== id));
       alert("Post permanently deleted.");
     } catch (err) {
