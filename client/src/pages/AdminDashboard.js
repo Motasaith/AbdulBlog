@@ -13,6 +13,7 @@ import {
   Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import AdminHeader from '../components/AdminHeader';
 
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -121,58 +122,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
-                AbdulBlog
-              </h1>
-              <div className="ml-6 hidden md:flex items-center space-x-1">
-                <span className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full">
-                  Admin Dashboard
-                </span>
-                {role === 'admin' && (
-                  <span className="px-3 py-1 text-xs font-medium bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full">
-                    Super Admin
-                  </span>
-                )}
-              </div>
-            </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Home
-              </Link>
-              <Link to="/blogs" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Blogs
-              </Link>
-              <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Contact
-              </Link>
-              <button
-                onClick={handleLogout}
-                disabled={isLoading}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Logging out...
-                  </>
-                ) : (
-                  <>
-                    <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
-                    Logout
-                  </>
-                )}
-              </button>
-            </nav>
-          </div>
-        </div>
-      </header>
+<AdminHeader title="Admin Dashboard" subtitle="Manage and oversee all blog activities" currentPage="dashboard" showBackButton={false} />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 text-white py-16">

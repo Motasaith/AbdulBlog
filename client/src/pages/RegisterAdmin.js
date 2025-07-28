@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
+import AdminHeader from "../components/AdminHeader";
 import { 
   UserPlusIcon,
   EyeIcon,
   EyeSlashIcon,
-  ArrowLeftIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
@@ -58,26 +58,12 @@ const RegisterAdmin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >
-                <ArrowLeftIcon className="h-5 w-5" />
-                <span>Back</span>
-              </button>
-              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                AbdulBlog
-              </h1>
-            </div>
-          </div>
-        </div>
-      </header>
+      <AdminHeader 
+        title="Register New Admin" 
+        subtitle="Create a new administrator account"
+        backTo="/admin/manage-admins"
+        currentPage="register-admin"
+      />
 
       {/* Main Content */}
       <main className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">

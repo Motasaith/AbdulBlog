@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
+import AdminHeader from "../components/AdminHeader";
 import { 
   ArrowPathIcon, 
   TrashIcon, 
-  ArrowLeftIcon,
   CalendarIcon,
   ExclamationTriangleIcon,
   ArchiveBoxXMarkIcon
@@ -70,55 +70,16 @@ const TrashBin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >
-                <ArrowLeftIcon className="h-5 w-5" />
-                <span>Back</span>
-              </button>
-              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                AbdulBlog
-              </h1>
-            </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Home
-              </Link>
-              <Link to="/blogs" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Blogs
-              </Link>
-              <Link to="/admin" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Dashboard
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <AdminHeader 
+        title="Trash Bin" 
+        subtitle="Restore or permanently delete posts"
+        backTo="/admin/manage-posts"
+        currentPage="trash"
+      />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
-              <ArchiveBoxXMarkIcon className="h-8 w-8 text-red-600 dark:text-red-400" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Trash Bin
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Restore or permanently delete posts
-              </p>
-            </div>
-          </div>
-          
           {/* Warning Notice */}
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
             <div className="flex items-start space-x-3">
